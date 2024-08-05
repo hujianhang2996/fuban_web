@@ -9,8 +9,25 @@
                         <el-col :span="3" style="text-align: end;">{{ disk.Temp }}°C</el-col>
                     </el-row>
                 </template>
-                <el-progress :percentage="((disk.TotalSize - disk.UsedSize) / disk.TotalSize * 100)"
-                    :format="(p) => `${p.toFixed(0)}%(${sizeFormatter(disk.TotalSize - disk.UsedSize, 'size')}/${sizeFormatter(disk.TotalSize, 'size')})`" />
+                <el-row justify="space-evenly" :gutter="10" align="middle">
+                    <el-col :span="12">
+                        <el-text truncated line-clamp="2">
+                            R: <br /> W:
+                        </el-text>
+                        <el-text truncated line-clamp="2" style="margin-left: 10px; text-align: end;">
+                            {{ disk.ReadCount }} <br /> {{ disk.WriteCount }}
+                        </el-text>
+                    </el-col>
+                    <el-col :span="12" style="text-align: right;">
+                        <el-progress :percentage="((disk.TotalSize - disk.UsedSize) / disk.TotalSize * 100)"
+                            :format="(p) => p.toFixed(0) + '%'" />
+                        <el-text>{{ `(${sizeFormatter(disk.TotalSize -
+                            disk.UsedSize,
+                            'size')}/${sizeFormatter(disk.TotalSize,
+                                'size')})` }}</el-text>
+                    </el-col>
+                </el-row>
+
             </el-card>
         </el-col>
     </el-row>
@@ -31,7 +48,7 @@ export default {
 
 <style type="text/css">
 .disks-child-card .el-card {
-    height: 110px;
+    height: 130px;
     margin-bottom: 10px;
     position: relative;
 }

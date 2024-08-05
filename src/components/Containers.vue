@@ -20,14 +20,15 @@
                     </el-row>
                 </template>
                 <el-row justify="space-evenly" :gutter="10" align="middle">
-                    <el-col :span="12" style="overflow:hidden">
-                        <el-link @click="() => { current_container = container; dialogVisible = true }">
-                            <el-text type="primary" truncated line-clamp="2">
+                    <el-col :span="12">
+                        <el-text truncated line-clamp="2">
+                            <el-link type="primary"
+                                @click="() => { current_container = container; dialogVisible = true }">
                                 {{ container.Port }} <br /> {{ container.Volume }}
-                            </el-text>
-                        </el-link>
+                            </el-link>
+                        </el-text>
                     </el-col>
-                    <el-col :span="12" style="overflow:hidden">
+                    <el-col :span="12">
                         <el-row justify="space-evenly" align="middle">
                             <el-col :span="8" style="font-size: 12px;">CPU</el-col>
                             <el-col :span="16"><el-progress :percentage="container.CpuLoad"

@@ -20,7 +20,7 @@
       <el-tabs v-model="tab_index">
         <el-tab-pane label="Main" :name="0" style="margin: 20px;">
           <h1>Statistic</h1>
-          <Statistic :ws_1s="ws_1s" :ws_5s="ws_5s"></Statistic>
+          <Statistic :ws_1s="ws_1s" :ws_5s="ws_5s" :isMobile="false"></Statistic>
           <h1>Disks</h1>
           <Disks :ws_5s="ws_5s"></Disks>
           <h1>Containers</h1>
@@ -35,7 +35,7 @@
     <el-main v-if="isMobile" v-loading="loading">
       <el-tabs v-model="tab_index" stretch>
         <el-tab-pane label="Statistic" :name="0">
-          <Statistic :ws_1s="ws_1s" :ws_5s="ws_5s"></Statistic>
+          <Statistic :ws_1s="ws_1s" :ws_5s="ws_5s" :isMobile="true"></Statistic>
         </el-tab-pane>
         <el-tab-pane label="Disks" :name="1">
           <Disks :ws_5s="ws_5s"></Disks>
