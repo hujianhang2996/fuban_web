@@ -9,9 +9,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
+    "axios": "^1.7.4",
     "bootstrap-icons": "^1.11.3",
+    "dayjs": "^1.11.12",
     "element-plus": "^2.7.8",
-    "vue": "^3.4.29"
+    "js-cookie": "^3.0.5",
+    "jsencrypt": "^3.3.2",
+    "vue": "^3.4.29",
+    "xss": "^1.0.15"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.5",
