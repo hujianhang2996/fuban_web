@@ -2,7 +2,7 @@
     <h1 v-if="!store.isMobile">Statistic</h1>
     <div :style="store.isMobile ? '' : 'text-align: end;position: absolute;top:30px;right:25px;'">
         <el-text style="font-weight: bold;">{{ data.os_name }}</el-text>
-        <el-text style="font-style: italic;">{{ ' ' + data.os_version }}</el-text>
+        <!-- <el-text style="font-style: italic;">{{ ' ' + data.os_version }}</el-text> -->
         <el-button circle text style="margin-left: 8px;" @click="data.show_logout_dialog = true"><i
                 class="bi-box-arrow-left"></i></el-button>
         <el-divider direction="vertical" />
@@ -285,6 +285,8 @@ const data = ref({
     os_version: '',
 })
 
+
+
 onMounted(() => {
     if (!store.authed) return
     axios({
@@ -301,7 +303,7 @@ onMounted(() => {
         if (response.data.CpuInfos.length > 0) {
             data.value.cpu_name = response.data.CpuInfos[0].modelName
         }
-        data.value.os_name = response.data.HostInfo.platform
+        data.value.os_name = response.data.HostInfo.kernelVersion
         data.value.os_version = response.data.HostInfo.platformVersion
     })
 })
@@ -419,6 +421,7 @@ function changeUnselectedNets() {
 }
 
 function changeSelectedSensor() {
+    if (data.value.current_editing_sensor.user_name.trim() == "") return
     store.post("/api/set/selected_sensor", data.value.current_editing_sensor, function (response) {
         ElMessage(response.data)
     })

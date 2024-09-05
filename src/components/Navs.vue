@@ -35,10 +35,12 @@
   </el-row>
   <el-dialog v-model="navs_setting" :width="store.isMobile ? '96%' : '600px'">
     <el-form :model="current_nav" label-width="auto" style="margin: 20px;">
-      <el-form-item label="Name">
+      <el-form-item label="Name" required error="name must not be empty"
+        :validate-status="current_nav.name.trim() == '' ? 'error' : 'success'">
         <el-input v-model="current_nav.name" />
       </el-form-item>
-      <el-form-item label="Url">
+      <el-form-item label="Url" required error="url must not be empty"
+        :validate-status="current_nav.url.trim() == '' ? 'error' : 'success'">
         <el-input v-model="current_nav.url" />
       </el-form-item>
       <el-form-item label="Icon">
@@ -95,6 +97,8 @@ function openNavAdding() {
 }
 
 function setOrAddNav() {
+  if (current_nav.value.name.trim() == "") return
+  if (current_nav.value.url.trim() == "") return
   if (navs_adding.value) {
     axios({
       url: import.meta.env.VITE_HTTP_URL + "/api/add/nav",
@@ -135,7 +139,6 @@ function setOrAddNav() {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       }).then(function (response) {
-        console.log(response.data.data)
         store.navs = response.data.data
       })
     })

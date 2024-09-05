@@ -7,6 +7,9 @@
                     <el-row justify="space-between">
                         <el-col :span="20"><el-text style="font-weight: bold;" truncated>{{ disk.Name }}
                             </el-text>
+                            <br>
+                            <el-text truncated>{{ disk.Path }}
+                            </el-text>
                         </el-col>
                         <el-col :span="3" style="text-align: end;">{{ disk.Temp }}°C</el-col>
                     </el-row>
@@ -37,6 +40,9 @@
                 <template #header>
                     <el-row justify="space-between">
                         <el-col :span="20"><el-text style="font-weight: bold;" truncated>{{ disk.Name }}
+                            </el-text>
+                            <br>
+                            <el-text truncated>{{ disk.Path }}
                             </el-text>
                         </el-col>
                         <el-col :span="3" style="text-align: end;">{{ disk.Temp }}°C</el-col>
@@ -92,8 +98,12 @@ const nonarray_disks = computed(() => {
 
 <style type="text/css">
 .disks-child-card .el-card {
-    height: 130px;
+    height: 150px;
     margin-bottom: 10px;
     position: relative;
+}
+
+.disks-child-card .el-card__header {
+    padding: 8px 18px;
 }
 </style>

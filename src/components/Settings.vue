@@ -1,6 +1,7 @@
 <template>
     <el-form label-width="auto" style="margin: 30px; max-width: 600px;">
-        <el-form-item label="Change user name">
+        <el-form-item label="Change user name" required error="user name must not be empty"
+            :validate-status="user_name.trim() == '' ? 'error' : 'success'">
             <el-input v-model="user_name">
                 <template #append><el-button @click="changeUserName">Confirm</el-button></template>
             </el-input>
@@ -34,16 +35,17 @@ q67evYwRKYYu73U23E2ngdoo/v0mT98t0p7Z+L/Y+yEOk/AUbgk66qgb4rT3SWPP
 ggKmQ1NOy1hzaOXl3we5PmQx8The8XTOQ+k+bx16rAjkoggXOfsxPpNqdtJv1Wd4
 e7VmLyRGpWlol1TD38qIiBkHykScaI/HzwIDAQAB
 -----END RSA Public Key-----`
+
 onMounted(() => {
     store.post("/api/username", null, (resp) => user_name.value = resp.data.data)
 })
 function changeUserName() {
-    if (user_name.value == "") return
+    if (user_name.value.trim() == "") return
     store.post("/api/set/username", { username: user_name.value }, (resp) => ElMessage(resp.data))
 }
 
 function changePassword() {
-    if (new_password.value == "") return
+    if (new_password.value.trim() == "") return
     const encryptor = new JSEncrypt()
     encryptor.setPublicKey(publicKey)
     store.post("/api/set/password", { new: encryptor.encrypt(new_password.value), old: encryptor.encrypt(old_password.value) }, (resp) => ElMessage(resp.data))
