@@ -40,7 +40,7 @@
                                 class="bi-gear"></i></el-button>
                     </el-col>
                 </el-row>
-                <div v-if="data.container_in_option && data.current_container.ID == container.ID"
+                <div v-if="data.containers_in_option.has(container.ID)"
                     style="position: absolute; width: 100%; height: 100%; top: 50%; left: 50%; transform: translate(-50%, -50%); background-color: rgba(122, 122, 122, 0.8)">
                     <el-progress :indeterminate="true" :percentage="50" :show-text="false" :duration="1"
                         :stroke-width="10"
@@ -105,12 +105,12 @@ const data = ref({
     current_container: {},
     show_container_detail: false,
     show_container_control: false,
-    container_in_option: false
+    containers_in_option: new Set()
 })
 
 function controlContainer(container_id, method) {
     data.value.show_container_control = false
-    data.value.container_in_option = true
+    data.value.containers_in_option = data.value.containers_in_option.add(container_id)
     const formData = new FormData()
     formData.append('id', container_id)
     formData.append('opt', method)
@@ -124,7 +124,8 @@ function controlContainer(container_id, method) {
             store.unauth()
             return
         }
-        data.value.container_in_option = false
+        if (data.value.containers_in_option.has(container_id))
+            data.value.containers_in_option.delete(container_id)
     })
 }
 
