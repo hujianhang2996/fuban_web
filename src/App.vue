@@ -15,9 +15,6 @@
         <el-tab-pane label="Navs" :name="1" style="margin: 20px;">
           <Navs></Navs>
         </el-tab-pane>
-        <el-tab-pane label="Settings" :name="2">
-          <Settings></Settings>
-        </el-tab-pane>
       </el-tabs>
     </el-main>
     <el-main v-if="store.isMobile" v-loading="store.loading">

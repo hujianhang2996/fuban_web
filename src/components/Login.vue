@@ -26,30 +26,25 @@ import { store } from '../store'
 import JSEncrypt from 'jsencrypt'
 
 const login_data = ref({ username: 'admin', password: 'admin' })
-const publicKey = `-----BEGIN RSA Public Key-----
-MIIBCgKCAQEAu/mnwjPaOXez5iVqNHux3Q9ZHhdw1gaDudvurAeaWqIJpY1zyZrO
-NL1MfkTuC8b8uUNLdHs6nr+6GhHNdyva1SO0wVJWfodoR9z7reyOv7PEQcYAHVeT
-g2OTdrH3n5Yuw79VJYLuOhygYxKTapxgdzJQ6tHZn54Yqjvw69mCnQ5rGBVGCpS0
-q67evYwRKYYu73U23E2ngdoo/v0mT98t0p7Z+L/Y+yEOk/AUbgk66qgb4rT3SWPP
-ggKmQ1NOy1hzaOXl3we5PmQx8The8XTOQ+k+bx16rAjkoggXOfsxPpNqdtJv1Wd4
-e7VmLyRGpWlol1TD38qIiBkHykScaI/HzwIDAQAB
------END RSA Public Key-----`
+
 function onSubmit() {
-    const encryptor = new JSEncrypt()
-    encryptor.setPublicKey(publicKey)
-    store.post("/login",
-        {
-            username: encryptor.encrypt(login_data.value.username),
-            password: encryptor.encrypt(login_data.value.password)
-        }, (response) => {
-            ElMessage(response.data)
-            if (response.data.type == 'success') {
-                localStorage.setItem('token', response.data.token)
-                store.auth()
-            } else {
-                store.unauth()
-            }
-        })
+    store.post("/public_key", null, (response) => {
+        const encryptor = new JSEncrypt()
+        encryptor.setPublicKey(response.data.data)
+        store.post("/login",
+            {
+                username: encryptor.encrypt(login_data.value.username),
+                password: encryptor.encrypt(login_data.value.password)
+            }, (response1) => {
+                ElMessage(response1.data)
+                if (response1.data.type == 'success') {
+                    localStorage.setItem('token', response1.data.token)
+                    store.auth()
+                } else {
+                    store.unauth()
+                }
+            })
+    })
 }
 
 function openGithub() {

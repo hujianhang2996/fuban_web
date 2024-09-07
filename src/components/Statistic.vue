@@ -3,8 +3,8 @@
     <div :style="store.isMobile ? '' : 'text-align: end;position: absolute;top:30px;right:25px;'">
         <el-text style="font-weight: bold;">{{ data.os_name }}</el-text>
         <!-- <el-text style="font-style: italic;">{{ ' ' + data.os_version }}</el-text> -->
-        <el-button circle text style="margin-left: 8px;" @click="data.show_logout_dialog = true"><i
-                class="bi-box-arrow-left"></i></el-button>
+        <el-button circle text style="margin-left: 8px;" icon="Setting" @click="data.show_setting_dialog = true">
+        </el-button>
         <el-divider direction="vertical" />
         <el-text style="width: 250px;">{{ secondsFormatter(store.ws_1s.Uptime) }}</el-text>
     </div>
@@ -251,7 +251,22 @@
         </el-dialog>
 
 
-        <el-dialog v-model="data.show_logout_dialog" align-center :width="store.isMobile ? '96%' : '500px'">
+        <el-dialog v-model="data.show_setting_dialog" align-center :width="store.isMobile ? '96%' : '500px'">
+            <Settings></Settings>
+            <el-form>
+                <el-form-item v-if="data.show_logout_dialog">
+                    <el-button @click="data.show_logout_dialog = false">Cancel</el-button>
+                    <el-button type="primary" @click="() => { data.show_logout_dialog = false; store.logout() }">
+                        Confirm
+                    </el-button>
+                </el-form-item>
+                <el-form-item v-else>
+                    <el-button type="primary" icon="SwitchButton"
+                        @click="data.show_logout_dialog = true">logout</el-button>
+                </el-form-item>
+            </el-form>
+        </el-dialog>
+        <!-- <el-dialog v-model="data.show_logout_dialog" align-center :width="store.isMobile ? '96%' : '500px'">
             <span>Logout?</span>
             <template #footer>
                 <div>
@@ -261,12 +276,12 @@
                     </el-button>
                 </div>
             </template>
-        </el-dialog>
+        </el-dialog> -->
     </el-row>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, watch } from 'vue'
 import { store } from "../store"
 import { sizeFormatter } from '../utils.js'
 import axios from 'axios'
@@ -278,6 +293,7 @@ const data = ref({
     show_mb_setting: false,
     show_sensor_setting: false,
     show_sensor_edit: false,
+    show_setting_dialog: false,
     show_logout_dialog: false,
     current_editing_sensor: null,
     cpu_name: '',
@@ -285,7 +301,12 @@ const data = ref({
     os_version: '',
 })
 
-
+watch(
+    () => data.value.show_setting_dialog,
+    () => {
+        if (!data.value.show_setting_dialog)
+            data.value.show_logout_dialog = false
+    })
 
 onMounted(() => {
     if (!store.authed) return
