@@ -7,9 +7,7 @@
       <el-tabs v-model="store.tab_index">
         <el-tab-pane label="Main" :name="0" style="margin: 20px;">
           <Statistic></Statistic>
-          <h1>Disks</h1>
           <Disks></Disks>
-          <h1>Containers</h1>
           <Containers></Containers>
         </el-tab-pane>
         <el-tab-pane label="Navs" :name="1" style="margin: 20px;">

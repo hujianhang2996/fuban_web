@@ -126,12 +126,10 @@
                 </el-form-item>
             </el-form>
             <template #footer>
-                <div>
-                    <el-button @click="data.show_cpu_detail = false">Cancel</el-button>
-                    <el-button type="primary" @click="changeCpuMbTempName">
-                        Confirm
-                    </el-button>
-                </div>
+                <el-button @click="data.show_cpu_detail = false">Cancel</el-button>
+                <el-button type="primary" @click="changeCpuMbTempName">
+                    Confirm
+                </el-button>
             </template>
         </el-dialog>
 
@@ -149,12 +147,10 @@
                 </el-form-item>
             </el-form>
             <template #footer>
-                <div>
-                    <el-button @click="data.show_mb_setting = false">Cancel</el-button>
-                    <el-button type="primary" @click="changeCpuMbTempName">
-                        Confirm
-                    </el-button>
-                </div>
+                <el-button @click="data.show_mb_setting = false">Cancel</el-button>
+                <el-button type="primary" @click="changeCpuMbTempName">
+                    Confirm
+                </el-button>
             </template>
         </el-dialog>
 
@@ -177,12 +173,10 @@
                 </el-checkbox>
             </div>
             <template #footer>
-                <div>
-                    <el-button @click="data.show_net_setting = false">Cancel</el-button>
-                    <el-button type="primary" @click="changeUnselectedNets">
-                        Confirm
-                    </el-button>
-                </div>
+                <el-button @click="data.show_net_setting = false">Cancel</el-button>
+                <el-button type="primary" @click="changeUnselectedNets">
+                    Confirm
+                </el-button>
             </template>
         </el-dialog>
 
@@ -242,6 +236,14 @@
             </el-form>
             <template #footer>
                 <div>
+                    <template v-if="data.show_confirm_delete_sensor">
+                        <el-button @click="data.show_confirm_delete_sensor = false">Cancel</el-button>
+                        <el-button type="danger" @click="unselectSensor(data.current_editing_sensor.name)">
+                            Confirm
+                        </el-button>
+                    </template>
+                    <el-button v-else type="danger" icon="Delete"
+                        @click="data.show_confirm_delete_sensor = true">Delete</el-button>
                     <el-button @click="data.show_sensor_edit = false">Cancel</el-button>
                     <el-button type="primary" @click="changeSelectedSensor">
                         Confirm
@@ -295,6 +297,7 @@ const data = ref({
     show_sensor_edit: false,
     show_setting_dialog: false,
     show_logout_dialog: false,
+    show_confirm_delete_sensor: false,
     current_editing_sensor: null,
     cpu_name: '',
     os_name: '',
@@ -393,13 +396,25 @@ function selectedChannel(sensor_name) {
 function switchSensorSelect(sensor_name, channel, sensor_type) {
     for (var i in store.selected_sensors) {
         if (sensor_name == store.selected_sensors[i].name) {
-            store.selected_sensors[i].real_select = !store.selected_sensors[i].real_select
+            store.selected_sensors[i].real_select = store.selected_sensors[i].real_select == 0 ? 1 : 0
             store.post("/api/set/selected_sensor", store.selected_sensors[i])
             return
         }
     }
-    store.selected_sensors.push({ name: sensor_name, user_name: sensor_name, type: sensor_type, channel: channel, real_select: true })
-    store.post("/api/add/selected_sensor", { name: sensor_name, user_name: sensor_name, type: sensor_type, channel: channel, real_select: true })
+    store.selected_sensors.push({ name: sensor_name, user_name: sensor_name, type: sensor_type, channel: channel, real_select: 1 })
+    store.post("/api/add/selected_sensor", { name: sensor_name, user_name: sensor_name, type: sensor_type, channel: channel, real_select: 1 })
+}
+
+function unselectSensor(sensor_name) {
+    for (var i in store.selected_sensors) {
+        if (sensor_name == store.selected_sensors[i].name) {
+            store.selected_sensors[i].real_select = 0
+            store.post("/api/set/selected_sensor", store.selected_sensors[i])
+            break
+        }
+    }
+    data.value.show_confirm_delete_sensor = false
+    data.value.show_sensor_edit = false
 }
 
 function showSensorEdit(sensor) {

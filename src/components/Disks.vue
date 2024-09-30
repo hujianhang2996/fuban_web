@@ -1,4 +1,5 @@
 <template>
+    <h1 v-if="!store.isMobile">Disks</h1>
     <h3>Array</h3>
     <el-row class="disks-child-card" :gutter="10" align="middle">
         <el-col v-for="disk in array_disks" :xs="24" :sm="12" :md="6" :lg="6" :xl="4">
